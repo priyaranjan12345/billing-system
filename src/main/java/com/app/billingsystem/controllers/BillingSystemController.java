@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/billing-system")
 //@Tag(name = "Billings System")
-public class BillingSystemController implements IBillingSystemController{
-
-
+public class BillingSystemController implements IBillingSystemController {
     @Override
     public void createUser() {
 
