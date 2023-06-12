@@ -18,8 +18,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false, unique = true)
-    private int phoneNumber;
-    @Column(nullable = false, unique = true)
     private String password;
 
 
