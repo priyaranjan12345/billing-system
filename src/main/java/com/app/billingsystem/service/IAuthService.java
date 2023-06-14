@@ -1,4 +1,5 @@
 package com.app.billingsystem.service;
-
-public class IAuthService {
+import com.app.billingsystem.models.dtos.LoginDto;
+public interface IAuthService {
+    String login(LoginDto loginDto);
 }
