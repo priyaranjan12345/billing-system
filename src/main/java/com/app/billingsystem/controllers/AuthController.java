@@ -10,17 +10,16 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
-
+public class AuthController implements IAuthController{
     private AuthService authService;
 
-    // Build Login REST API
-    @PostMapping("/login")
+    @Override
     public ResponseEntity<JwtAuthResponse> authenticate(@RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setAccessToken(token);
+        jwtAuthResponse.setTokenType("Bearer");
 
         return ResponseEntity.ok(jwtAuthResponse);
     }
