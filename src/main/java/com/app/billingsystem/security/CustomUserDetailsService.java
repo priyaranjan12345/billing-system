@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-
     private UserRepository userRepository;
 
     @Override
