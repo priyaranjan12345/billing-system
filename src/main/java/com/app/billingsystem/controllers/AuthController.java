@@ -27,7 +27,17 @@ public class AuthController implements IAuthController{
 
     @Override
     public User createUser(AuthRequest authRequest) throws Exception {
-        User user = authService.createUser(authRequest);
-        return user;
+        return authService.createUser(authRequest);
     }
+
+    @Override
+    public String home() {
+        return "Welcome ";
+    }
+
+    @Override
+    public String secured() {
+        return "Hello, Secured!";
+    }
+
 }
