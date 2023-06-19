@@ -4,6 +4,7 @@ import com.app.billingsystem.models.dtos.JwtAuthResponse;
 import com.app.billingsystem.models.dtos.AuthRequest;
 import com.app.billingsystem.models.entities.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,4 +19,11 @@ public interface IAuthController {
     @PostMapping("/createUser")
     User createUser(@RequestBody AuthRequest loginDto) throws Exception;
     // delete auth user account
+
+    // oauth 2
+    @GetMapping("/")
+    public String home();
+
+    @GetMapping("/secured")
+    public String secured();
 }
