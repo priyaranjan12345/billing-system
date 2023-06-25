@@ -30,27 +30,34 @@ public class AuthService implements IAuthService {
 
     @Override
     public String login(AuthRequest authRequest) {
+        // authenticate user
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authRequest.getEmail(), authRequest.getPassword()
+                        authRequest.getEmail(),
+                        authRequest.getPassword()
                 )
         );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return jwtTokenProvider.generateToken(authentication);
+        // check is authorized or not
+        if (authentication.isAuthenticated()) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return jwtTokenProvider.generateToken(authentication);
+        } else {
+            return "Error: Access token denied";
+        }
     }
 
     @Override
     public User createUser(AuthRequest authRequest) throws Exception {
         boolean isUserExist = userRepository.existsByEmail(authRequest.getEmail());
         Optional<Role> role = roleRepository.findById(2L);
-        Set<Role> roles = new HashSet<Role>();
+        Set<Role> roles = new HashSet<>();
         role.ifPresent(roles::add);
 
+        // check user present or not
         if (isUserExist) {
             throw new Exception("User already exist.");
-        }else{
+        } else {
             User user = User.builder()
                     .email(authRequest.getEmail())
                     .password(passwordEncoder.encode(authRequest.getPassword()))
@@ -59,7 +66,6 @@ public class AuthService implements IAuthService {
 
             return userRepository.save(user);
         }
-
     }
 }
 
