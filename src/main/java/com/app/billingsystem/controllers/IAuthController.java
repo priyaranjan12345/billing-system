@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface IAuthController {
-
     /**
      * authenticate user by emailId and password
      * */
@@ -19,11 +18,4 @@ public interface IAuthController {
     @PostMapping("/createUser")
     User createUser(@RequestBody AuthRequest loginDto) throws Exception;
     // delete auth user account
-
-    // oauth 2
-    @GetMapping("/")
-    public String home();
-
-    @GetMapping("/secured")
-    public String secured();
 }

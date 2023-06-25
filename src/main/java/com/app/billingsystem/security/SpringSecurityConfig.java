@@ -1,6 +1,7 @@
 package com.app.billingsystem.security;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,34 +13,41 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SpringSecurityConfig {
     private UserDetailsService userDetailsService;
-
-    @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private JwtAuthenticationFilter authFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Disable CSRF protection
-        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
+        return http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers("/favicon.ico").permitAll()
-                                .requestMatchers("/api/auth/secured").permitAll()
-                                .requestMatchers("/api/auth/**")
-                                .permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/swagger-ui.html").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/v1/billing-system/**").authenticated()
                                 .anyRequest()
                                 .authenticated()
-                ).oauth2Login(withDefaults())
-                .formLogin(withDefaults());
-        return http.build();
+
+
+                )
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+//                .oauth2Login(withDefaults())
+//                .formLogin(withDefaults());
+
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
