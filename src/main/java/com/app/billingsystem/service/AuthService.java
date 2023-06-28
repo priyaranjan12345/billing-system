@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +37,16 @@ public class AuthService implements IAuthService {
                 )
         );
 
-        // check is authorized or not
         if (authentication.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             return jwtTokenProvider.generateToken(authentication);
         } else {
             return "Error: Access token denied";
         }
+    }
+
+    @Override
+    public String getUsername(String token) {
+        return jwtTokenProvider.getUsername(token);
     }
 
     @Override
@@ -66,6 +68,11 @@ public class AuthService implements IAuthService {
 
             return userRepository.save(user);
         }
+    }
+
+    @Override
+    public String logout(String token) {
+        return null;
     }
 }
 
