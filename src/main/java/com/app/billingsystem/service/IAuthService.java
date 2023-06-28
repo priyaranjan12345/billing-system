@@ -4,5 +4,7 @@ import com.app.billingsystem.models.entities.User;
 
 public interface IAuthService {
     String login(AuthRequest authRequest);
-    public User createUser(AuthRequest authRequest) throws Exception;
+    String getUsername(String token);
+    User createUser(AuthRequest authRequest) throws Exception;
+    String logout(String token);
 }
