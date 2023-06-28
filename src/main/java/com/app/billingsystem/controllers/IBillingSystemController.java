@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 public interface IBillingSystemController {
+
     @GetMapping("/users")
     List<String> getUsers();
 
