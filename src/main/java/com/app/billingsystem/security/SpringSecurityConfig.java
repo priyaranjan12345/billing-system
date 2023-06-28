@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
@@ -35,14 +37,11 @@ public class SpringSecurityConfig {
                                 .requestMatchers("/v1/billing-system/**").authenticated()
                                 .anyRequest()
                                 .authenticated()
-
-
                 )
+//                .oauth2Login(withDefaults())
+//                .formLogin(withDefaults())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-//                .oauth2Login(withDefaults())
-//                .formLogin(withDefaults());
-
     }
 
     @Bean
