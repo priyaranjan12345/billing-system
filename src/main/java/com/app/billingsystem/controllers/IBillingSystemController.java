@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 public interface IBillingSystemController {
-
     @GetMapping("/users")
     List<String> getUsers();
 
@@ -13,3 +12,10 @@ public interface IBillingSystemController {
     // CRUD bill items
     // crud stock
 }
+
+// jwt auth based auth
+// jpa orm with mysql
+// docker deploy
+// lombok
+// di
+//
