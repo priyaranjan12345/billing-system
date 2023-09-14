@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
+                                // no restrictions
                                 .requestMatchers(
                                         "/api/v1/auth/**",
                                         "/v2/api-docs",
@@ -59,11 +60,18 @@ public class SecurityConfiguration {
                                         "/swagger-ui.html"
                                 )
                                 .permitAll()
+                                // management endpoints : manager and admin can access
                                 .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
                                 .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
                                 .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
                                 .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
                                 .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+                                // admin endpoints : only admin can access
+                                .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
+                                .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
+                                .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
+                                .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
+                                .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -84,9 +92,3 @@ public class SecurityConfiguration {
         return http.build();
     }
 }
-
-//                .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
-//                .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
-//                .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
-//                .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-//                .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())

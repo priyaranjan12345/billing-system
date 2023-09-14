@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/manager-api")
+@RequestMapping("/api/v1/management")
 public class ManagerController {
     @GetMapping("/get-admin-data")
     public String getData() {
