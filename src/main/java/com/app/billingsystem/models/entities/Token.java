@@ -10,9 +10,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Builder
-@NoArgsConstructor
+@RequiredArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Token {
