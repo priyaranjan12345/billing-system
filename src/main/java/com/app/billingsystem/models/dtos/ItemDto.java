@@ -22,7 +22,7 @@ public class ItemDto {
     private String desc;
 
     @NotNull(message = "price is required")
-    private  double price;
+    private Double price;
 
     @NotNull(message = "image is required")
     private MultipartFile image;
