@@ -22,7 +22,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Tag(name = "Authentication Controller", description = "auth apis")
 public class AuthenticationController {
-
     private final AuthenticationService service;
 
     @PostMapping("/register")
@@ -46,7 +45,5 @@ public class AuthenticationController {
     ) throws IOException {
         service.refreshToken(request, response);
     }
-
-
 }
 

@@ -12,7 +12,6 @@ import java.util.Objects;
 @ToString
 @Builder
 @RequiredArgsConstructor
-//@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Token {
