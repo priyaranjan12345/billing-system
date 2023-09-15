@@ -1,9 +1,13 @@
 package com.app.billingsystem.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.app.billingsystem.models.dtos.CartItemsDto;
+import com.app.billingsystem.models.dtos.ItemDto;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -13,8 +17,30 @@ public class UserController {
         return "Get: Hello User";
     }
 
-    @PostMapping("/post-user-data")
-    public String postData() {
+    @PostMapping(value = "/add-item",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public String addItem(@ModelAttribute ItemDto itemDto){
         return "Post: Hello User";
     }
+    @PostMapping(value = "/save-order-generate-bill")
+    public String saveOrderGenerate(@RequestParam CartItemsDto cartItemsDto){
+        return "saveOrderGenerate";
+
+    }
+
+    @GetMapping(value = "/get-my-items")
+    public List<ItemDto> getMyItems(){
+        return new ArrayList<>();
+
+    }
+    @GetMapping(value = "/get-my-order")
+    public void getMyOrders(){}
+
+    @GetMapping(value = "/get-order-by-id/{orderId}")
+    public void getOrderDetailsById(@PathVariable BigInteger orderId){}
+
+
+
 }
+
+
+
