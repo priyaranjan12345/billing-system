@@ -1,5 +1,6 @@
 package com.app.billingsystem.service;
 
+import com.app.billingsystem.exception.NotFoundError;
 import com.app.billingsystem.models.dtos.ItemRequest;
 import com.app.billingsystem.models.dtos.ItemResponse;
 import com.app.billingsystem.models.entities.Item;
@@ -62,8 +63,37 @@ public class ItemService {
     }
 
 
-    public ItemRequest updateItem(Long itemId) {
-        return new ItemRequest();
+    public ItemResponse updateItem(Long itemId, ItemRequest itemRequest) throws Exception {
+        Optional<Item> item = itemRepository.findById(itemId);
+        LocalDateTime lastUpdateDate = LocalDateTime.now();
+        String filePath = fileService.uploadImage(itemRequest.getImage());
+
+        // if item not found throw exception
+        if (item.isEmpty()) {
+           throw new NotFoundError("Item with "+itemId+" not found");
+        }
+
+        // update
+        Item updatedItem = Item.builder()
+                .name(itemRequest.getName())
+                .description((itemRequest.getDescription()))
+                .price(itemRequest.getPrice())
+                .image(filePath)
+                .lastModifiedDate(lastUpdateDate)
+                .build();
+
+        // save updated item
+        Item savedItem = itemRepository.save(updatedItem);
+
+        // return saved item in side response
+        return ItemResponse.builder()
+                .name(savedItem.getName())
+                .description(savedItem.getDescription())
+                .price(savedItem.getPrice())
+                .image(savedItem.getImage())
+                .creationDate(savedItem.getCreationDate().toString())
+                .lastModifiedDate(savedItem.getLastModifiedDate().toString())
+                .build();
     }
 
 

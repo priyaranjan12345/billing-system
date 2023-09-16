@@ -21,9 +21,11 @@ public class Orders {
     private float discount;
     private float gst;
     private float grandTotal;
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
+
     @ManyToOne
     @JoinColumn(name = "itemSoldId")
     private SoldItems soldItems;

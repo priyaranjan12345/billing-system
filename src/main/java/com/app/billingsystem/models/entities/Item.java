@@ -18,7 +18,8 @@ import java.util.Objects;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(unique = true)
+    private Long itemId;
 
     @Column(nullable = false)
     private String name;
@@ -51,7 +52,7 @@ public class Item {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Item item = (Item) o;
-        return getId() != null && Objects.equals(getId(), item.getId());
+        return getItemId() != null && Objects.equals(getItemId(), item.getItemId());
     }
 
     @Override

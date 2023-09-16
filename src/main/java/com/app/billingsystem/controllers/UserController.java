@@ -4,6 +4,7 @@ import com.app.billingsystem.models.dtos.CartItemsDto;
 import com.app.billingsystem.models.dtos.ItemRequest;
 import com.app.billingsystem.models.dtos.ItemResponse;
 import com.app.billingsystem.service.ItemService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,30 +21,42 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
     final private ItemService itemService;
+
     @GetMapping("/get-user-data")
     public String getData() {
         return "Get: Hello User";
     }
 
-    @PostMapping(value = "/add-item",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ItemResponse> addItem(@ModelAttribute ItemRequest itemRequest) throws IOException {
-        ItemResponse itemResponse=itemService.addItem(itemRequest);
-        return new ResponseEntity<>(itemResponse, HttpStatus.CREATED);
+    @PostMapping(value = "/add-item", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ItemResponse> addItem(@Valid @ModelAttribute ItemRequest itemRequest) throws IOException {
+        ItemResponse itemResponse = itemService.addItem(itemRequest);
+        return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/update-item-details/{id}")
+    public ResponseEntity<ItemResponse> updateItemDetails(@PathVariable("id") Long id, @Valid @ModelAttribute ItemRequest itemRequest) throws Exception {
+        ItemResponse itemResponse = itemService.updateItem(id, itemRequest);
+        return new ResponseEntity<>(itemResponse, HttpStatus.OK);
+    }
+
+
     @PostMapping(value = "/save-order-generate-bill")
-    public String saveOrderGenerate(@RequestParam CartItemsDto cartItemsDto){
+    public String saveOrderGenerate(@RequestParam CartItemsDto cartItemsDto) {
         return "saveOrderGenerate";
     }
 
     @GetMapping(value = "/get-my-items")
-    public List<ItemResponse> getMyItems(){
+    public List<ItemResponse> getMyItems() {
         return new ArrayList<>();
     }
+
     @GetMapping(value = "/get-my-order")
-    public void getMyOrders(){}
+    public void getMyOrders() {
+    }
 
     @GetMapping(value = "/get-order-by-id/{orderId}")
-    public void getOrderDetailsById(@PathVariable BigInteger orderId){}
+    public void getOrderDetailsById(@PathVariable BigInteger orderId) {
+    }
 }
 
 
