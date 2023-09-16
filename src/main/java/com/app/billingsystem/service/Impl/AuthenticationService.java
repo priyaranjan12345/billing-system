@@ -1,4 +1,4 @@
-package com.app.billingsystem.service;
+package com.app.billingsystem.service.Impl;
 
 import com.app.billingsystem.models.dtos.AuthenticationRequest;
 import com.app.billingsystem.models.dtos.AuthenticationResponse;
@@ -79,7 +79,7 @@ public class AuthenticationService {
     }
 
     private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getUserId());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {

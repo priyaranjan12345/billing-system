@@ -3,13 +3,7 @@ package com.app.billingsystem.models.entities;
 
 import com.app.billingsystem.models.enums.Role;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,12 +21,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(name = "User")
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Integer userId;
     private String firstname;
     private String lastname;
     private String email;
@@ -43,6 +37,11 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Orders> orders;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Item> items;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -4,7 +4,7 @@ package com.app.billingsystem.controllers;
 import com.app.billingsystem.models.dtos.AuthenticationRequest;
 import com.app.billingsystem.models.dtos.AuthenticationResponse;
 import com.app.billingsystem.models.dtos.RegisterRequest;
-import com.app.billingsystem.service.AuthenticationService;
+import com.app.billingsystem.service.Impl.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
