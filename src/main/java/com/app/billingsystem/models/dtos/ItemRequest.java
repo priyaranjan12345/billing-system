@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @NoArgsConstructor
 @Builder
-public class ItemDto {
+public class ItemRequest {
 
     @NotNull(message = "name is required")
     @Size(min =1,max = 100,message = "name length should be 1 to 100")
@@ -23,7 +23,7 @@ public class ItemDto {
     private String description;
 
     @NotNull(message = "price is required")
-    private  double price;
+    private Double price;
 
     @NotNull(message = "image is required")
     private MultipartFile image;

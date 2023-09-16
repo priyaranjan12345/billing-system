@@ -1,6 +1,5 @@
-package com.app.billingsystem.service.Impl;
+package com.app.billingsystem.service;
 
-import com.app.billingsystem.models.entities.User;
 import com.app.billingsystem.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,13 +35,5 @@ public class LogoutService implements LogoutHandler {
             tokenRepository.save(storedToken);
             SecurityContextHolder.clearContext();
         }
-    }
-
-    public static interface IAuthenticationService {
-    //    public AuthenticationResponse register(RegisterRequest request);
-    //    public AuthenticationResponse authenticate(AuthenticationRequest request);
-        public void saveUserToken(User user, String jwtToken);
-        public void revokeAllUserTokens(User user);
-        public void refreshToken(HttpServletRequest request, HttpServletResponse response);
     }
 }

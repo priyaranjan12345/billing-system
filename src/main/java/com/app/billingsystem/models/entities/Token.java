@@ -12,7 +12,6 @@ import java.util.Objects;
 @ToString
 @Builder
 @RequiredArgsConstructor
-//@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Token {
@@ -31,7 +30,7 @@ public class Token {
     public boolean expired;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @ToString.Exclude
     public User user;
 
