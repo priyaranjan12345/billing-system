@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class UserController {
 
     @PostMapping(value = "/add-item",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 
-    public ResponseEntity<ItemDto> addItem(@ModelAttribute ItemDto itemDto){
+    public ResponseEntity<ItemDto> addItem(@ModelAttribute ItemDto itemDto) throws IOException {
         ItemDto itemDto1=itemService.addItem(itemDto);
         return new ResponseEntity<ItemDto>(itemDto1, HttpStatus.CREATED);
 

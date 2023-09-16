@@ -2,6 +2,9 @@ package com.app.billingsystem.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
 
 @Data
 @Getter
@@ -18,7 +21,9 @@ public class Item {
     private  String name;
     private String description;
     private  double price;
-    private String image;
+    private MultipartFile image;
+    private  Date creationDate;
+    private Date lastModifiedDate;
     @ManyToOne
     @JoinColumn(name = "item")
     private SoldItems soldItems;

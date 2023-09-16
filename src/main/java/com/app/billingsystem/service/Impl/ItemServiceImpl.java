@@ -8,11 +8,14 @@ import com.app.billingsystem.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -24,27 +27,33 @@ public class ItemServiceImpl implements ItemService {
 
     private ModelMapper mapper;
 
+    @Value("${item.image.path}")
+    private  String imageUploadPath;
+
 
     @Override
     public ItemDto addItem(ItemDto itemDto) throws IOException {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime creationDate = LocalDateTime.now();
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        String filePath=fileService.uploadImage(itemDto.getImage());
-        Item item= Item.builder()
-                .name(itemDto.getName())
-                .price(itemDto.getPrice())
-                .image(filePath.toString())
-                .description((itemDto.getDescription())).build();
-        itemRepository.save(item);
-        return new ItemDto();
+        Item item = mapper.map(itemDto, Item.class);
+
+        item.setName(itemDto.getName());
+        item.setDescription(itemDto.getDescription());
+        item.setPrice(itemDto.getPrice());
+        item.setCreationDate(new Date());
+        item.setLastModifiedDate(new Date());
+        MultipartFile itemImage=itemDto.getImage();
+        if(itemImage !=null && !itemImage.isEmpty()){
+            String fileName=itemImage.getOriginalFilename();
+
+        }
+
+
+
+        Item saveItem = itemRepository.save(item);
+        return mapper.map(saveItem, ItemDto.class);
 
 
     }
-//        Item item = mapper.map(itemDto, Item.class);
-//        item.setImage(fileService.uploadImage(itemDto.getImage()));
-//        Item saveItem = itemRepository.save(item);
-//        return mapper.map(saveItem, ItemDto.class);
+
 
 
         @Override

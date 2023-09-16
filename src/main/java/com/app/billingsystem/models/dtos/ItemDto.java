@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 
 
 @Data
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Builder
 public class ItemDto {
+    private  int id;
 
     @NotNull(message = "name is required")
     @Size(min =1,max = 100,message = "name length should be 1 to 100")
@@ -27,5 +29,9 @@ public class ItemDto {
 
     @NotNull(message = "image is required")
     private MultipartFile image;
+
+    private Date creationDate;
+
+    private Date lastModifiedDate;
 
 }
