@@ -11,15 +11,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @Getter
 @NoArgsConstructor
-public class ItemDto {
+@Builder
+public class ItemRequest {
 
     @NotNull(message = "name is required")
     @Size(min =1,max = 100,message = "name length should be 1 to 100")
     private  String name;
 
-    @NotNull(message = "desc is required")
-    @Size(min =50,max = 250,message = "desc length should be 1 to 100")
-    private String desc;
+    @NotNull(message = "description is required")
+    @Size(min =50,max = 250,message = "description length should be 1 to 100")
+    private String description;
 
     @NotNull(message = "price is required")
     private Double price;
