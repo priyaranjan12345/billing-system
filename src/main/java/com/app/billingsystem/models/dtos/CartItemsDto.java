@@ -10,5 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class CartItemsDto {
-    private List<CartItem> itemsId;
+    private List<CartItem> cartItems;
+    private Double discount;
+    private Double gst;
 }

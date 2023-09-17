@@ -8,6 +8,6 @@ import lombok.*;
 @Setter
 @Getter
 public class CartItem {
-    private  String itemId;
+    private  Long itemId;
     private  int quantity;
 }
