@@ -4,8 +4,6 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-
 @Data
 @AllArgsConstructor
 @Setter
@@ -13,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Builder
 public class ItemRequest {
-
     @NotNull(message = "name is required")
     @Size(min =1,max = 100,message = "name length should be 1 to 100")
     private  String name;
@@ -27,5 +24,4 @@ public class ItemRequest {
 
     @NotNull(message = "image is required")
     private MultipartFile image;
-
 }
