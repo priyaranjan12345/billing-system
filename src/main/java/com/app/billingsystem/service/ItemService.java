@@ -8,12 +8,10 @@ import com.app.billingsystem.models.entities.User;
 import com.app.billingsystem.repository.ItemRepository;
 import com.app.billingsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -26,7 +24,7 @@ public class ItemService {
 
     public FileService fileService;
 
-    public ItemResponse addItem(ItemRequest itemRequest) throws IOException {
+    public ItemResponse addItem(ItemRequest itemRequest) throws Exception {
         LocalDateTime creationDate = LocalDateTime.now();
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         String filePath = fileService.uploadImage(itemRequest.getImage());
