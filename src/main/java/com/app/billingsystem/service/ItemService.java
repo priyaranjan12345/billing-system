@@ -1,5 +1,4 @@
 package com.app.billingsystem.service;
-
 import com.app.billingsystem.exception.NotFoundError;
 import com.app.billingsystem.exception.ResourceNotFoundException;
 import com.app.billingsystem.helper.PageHelper;
@@ -10,7 +9,6 @@ import com.app.billingsystem.models.entities.Item;
 import com.app.billingsystem.models.entities.User;
 import com.app.billingsystem.repository.ItemRepository;
 import com.app.billingsystem.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,8 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -129,13 +127,12 @@ public class ItemService {
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item not found by this Id "));
         String fullPath=imagePath+item.getImage();
+        System.out.println(fullPath);
         try{
             Path path= Paths.get(fullPath);
-            System.out.println("paths"+path);
+            System.out.println("paths "+path);
             Files.delete(path);
-        }catch (NoSuchFileException ex){
-            ex.printStackTrace();
-        }catch(IOException e){
+        } catch(IOException e){
             e.printStackTrace();
         }
         itemRepository.delete(item);
