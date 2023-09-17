@@ -1,30 +1,48 @@
 package com.app.billingsystem.service;
 
 import com.app.billingsystem.exception.NotFoundError;
+import com.app.billingsystem.exception.ResourceNotFoundException;
+import com.app.billingsystem.helper.PageHelper;
 import com.app.billingsystem.models.dtos.ItemRequest;
 import com.app.billingsystem.models.dtos.ItemResponse;
+import com.app.billingsystem.helper.PageableResponse;
 import com.app.billingsystem.models.entities.Item;
 import com.app.billingsystem.models.entities.User;
 import com.app.billingsystem.repository.ItemRepository;
 import com.app.billingsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ItemService {
 
+    @Autowired
     public ItemRepository itemRepository;
+
+    @Autowired
     public UserRepository userRepository;
 
+    @Autowired
     public FileService fileService;
+
+    @Value("${image.directory.path}")
+    private String imagePath;
 
     public ItemResponse addItem(ItemRequest itemRequest) throws IOException {
         LocalDateTime creationDate = LocalDateTime.now();
@@ -96,8 +114,32 @@ public class ItemService {
                 .build();
     }
 
+    public PageableResponse<ItemResponse> getAllItem(int pageNumber,int pageSize,String sortBy,String sortDir){
+        Sort sort = (sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
+        Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
+        Page<Item> page=itemRepository.findAll(pageable);
+        PageableResponse<ItemResponse> response = PageHelper.getPageableResponse(page, ItemResponse.class);
+        return  response;
+    }
+
+
+
+
 
     public void deleteItem(Long itemId) {
-        itemRepository.deleteById(itemId);
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item not found by this Id "));
+        String fullPath=imagePath+item.getImage();
+        try{
+            Path path= Paths.get(fullPath);
+            System.out.println("paths"+path);
+            Files.delete(path);
+        }catch (NoSuchFileException ex){
+            ex.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        itemRepository.delete(item);
     }
+
+
 }
