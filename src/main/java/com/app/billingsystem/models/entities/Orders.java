@@ -1,16 +1,16 @@
 package com.app.billingsystem.models.entities;
+
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
-@Data
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
-@Table(name="Orders")
+@Builder
+@Entity
+@Table(name = "Orders")
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,11 +21,12 @@ public class Orders {
     private float discount;
     private float gst;
     private float grandTotal;
-    @ManyToOne
-    @JoinColumn(name="userId")
-    private User user;
-    @ManyToOne
-    @JoinColumn(name="itemSoldId")
-    private SoldItems soldItems ;
 
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "itemSoldId")
+    private SoldItems soldItems;
 }

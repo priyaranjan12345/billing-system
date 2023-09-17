@@ -2,28 +2,25 @@ package com.app.billingsystem.models.entities;
 
 
 import com.app.billingsystem.models.enums.Role;
-
 import jakarta.persistence.*;
-
-import java.util.Collection;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "User")
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue
     private Integer userId;
@@ -36,11 +33,15 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Token> tokens;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Orders> orders;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Item> items;
 
     @Override
@@ -76,5 +77,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return getUserId() != null && Objects.equals(getUserId(), user.getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

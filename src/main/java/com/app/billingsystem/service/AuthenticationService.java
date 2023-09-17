@@ -1,9 +1,8 @@
-package com.app.billingsystem.service.Impl;
+package com.app.billingsystem.service;
 
 import com.app.billingsystem.models.dtos.AuthenticationRequest;
 import com.app.billingsystem.models.dtos.AuthenticationResponse;
 import com.app.billingsystem.models.dtos.RegisterRequest;
-import com.app.billingsystem.security.JwtService;
 import com.app.billingsystem.models.entities.Token;
 import com.app.billingsystem.repository.TokenRepository;
 import com.app.billingsystem.models.enums.TokenType;

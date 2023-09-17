@@ -14,6 +14,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import static com.app.billingsystem.models.enums.Permission.USER_CREATE;
+import static com.app.billingsystem.models.enums.Permission.USER_DELETE;
+import static com.app.billingsystem.models.enums.Permission.USER_READ;
+import static com.app.billingsystem.models.enums.Permission.USER_UPDATE;
 import static com.app.billingsystem.models.enums.Permission.ADMIN_CREATE;
 import static com.app.billingsystem.models.enums.Permission.ADMIN_DELETE;
 import static com.app.billingsystem.models.enums.Permission.ADMIN_READ;
@@ -22,6 +26,7 @@ import static com.app.billingsystem.models.enums.Permission.MANAGER_CREATE;
 import static com.app.billingsystem.models.enums.Permission.MANAGER_DELETE;
 import static com.app.billingsystem.models.enums.Permission.MANAGER_READ;
 import static com.app.billingsystem.models.enums.Permission.MANAGER_UPDATE;
+import static com.app.billingsystem.models.enums.Role.USER;
 import static com.app.billingsystem.models.enums.Role.ADMIN;
 import static com.app.billingsystem.models.enums.Role.MANAGER;
 import static org.springframework.http.HttpMethod.DELETE;
@@ -72,6 +77,12 @@ public class SecurityConfiguration {
                                 .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
                                 .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
                                 .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
+                                // users endpoint: only user can access
+                                .requestMatchers("/api/v1/user/**").hasRole(USER.name())
+                                .requestMatchers(GET, "/api/v1/user/**").hasAuthority(USER_READ.name())
+                                .requestMatchers(POST, "/api/v1/user/**").hasAuthority(USER_CREATE.name())
+                                .requestMatchers(PUT, "/api/v1/user/**").hasAuthority(USER_UPDATE.name())
+                                .requestMatchers(DELETE, "/api/v1/user/**").hasAuthority(USER_DELETE.name())
                                 .anyRequest()
                                 .authenticated()
                 )

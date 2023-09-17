@@ -2,14 +2,15 @@ package com.app.billingsystem.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.hibernate.Hibernate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
 @Getter
 @Setter
-@NoArgsConstructor
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
@@ -17,20 +18,45 @@ import java.util.Date;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  int id;
-    private  String name;
+    @Column(unique = true)
+    private Long itemId;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String description;
-    private  double price;
-    private MultipartFile image;
-    private  Date creationDate;
-    private Date lastModifiedDate;
+
+    @Column(nullable = false)
+    private double price;
+
+    @Column(nullable = false)
+    private String image;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime creationDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime lastModifiedDate;
+
     @ManyToOne
     @JoinColumn(name = "item")
     private SoldItems soldItems;
+
     @ManyToOne
-    @JoinColumn(name="user")
+    @JoinColumn(name = "user")
     private User user;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Item item = (Item) o;
+        return getItemId() != null && Objects.equals(getItemId(), item.getItemId());
+    }
 
-
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

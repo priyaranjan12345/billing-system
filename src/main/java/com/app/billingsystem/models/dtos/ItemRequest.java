@@ -4,17 +4,13 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-
-
 @Data
 @AllArgsConstructor
 @Setter
 @Getter
 @NoArgsConstructor
 @Builder
-public class ItemDto {
-    private  int id;
+public class ItemRequest {
 
     @NotNull(message = "name is required")
     @Size(min =1,max = 100,message = "name length should be 1 to 100")
@@ -25,13 +21,9 @@ public class ItemDto {
     private String description;
 
     @NotNull(message = "price is required")
-    private  double price;
+    private Double price;
 
     @NotNull(message = "image is required")
     private MultipartFile image;
-
-    private Date creationDate;
-
-    private Date lastModifiedDate;
 
 }
