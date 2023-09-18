@@ -29,7 +29,6 @@ public class UserController {
         return "Get: Hello User";
     }
 
-
     @PostMapping(value = "/add-item", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ItemResponse> addItem(@Valid @ModelAttribute ItemRequest itemRequest) throws IOException {
         System.out.println("called add item controller");
@@ -37,7 +36,6 @@ public class UserController {
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
 
     }
-
 
     @PutMapping(value = "/update-item-details/{id}")
     public ResponseEntity<ItemResponse> updateItemDetails(@PathVariable("id") Long id, @Valid @ModelAttribute ItemRequest itemRequest) throws Exception {
@@ -54,19 +52,14 @@ public class UserController {
         return  new ResponseEntity<>(itemService.getAllItem(pageNumber,pageSize,sortBy,sortDir),HttpStatus.OK);
     }
 
-
-
-
     @DeleteMapping(value ="/delete-item/{id}")
     public ResponseEntity<String> deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
         return new ResponseEntity<>("Item deleted!!",HttpStatus.OK);
     }
 
-
-
     @PostMapping(value = "/save-order-generate-bill")
-    public String saveOrderGenerate(@RequestParam CartItemsDto cartItemsDto) {
+    public String saveOrderGenerateBill(@RequestParam CartItemsDto cartItemsDto) {
         return "saveOrderGenerate";
     }
 
@@ -80,7 +73,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/get-order-by-id/{orderId}")
-    public void getOrderDetailsById(@PathVariable BigInteger orderId) {
+    public void getOrderDetailsById(@PathVariable Long orderId) {
     }
 }
 

@@ -9,15 +9,17 @@ import com.app.billingsystem.models.entities.Item;
 import com.app.billingsystem.models.entities.User;
 import com.app.billingsystem.repository.ItemRepository;
 import com.app.billingsystem.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.io.IOException;
 
@@ -28,24 +30,21 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ItemService {
-
-    @Autowired
-    public ItemRepository itemRepository;
-
-    @Autowired
-    public UserRepository userRepository;
-
-    @Autowired
-    public FileService fileService;
-
     @Value("${image.directory.path}")
     private String imagePath;
+
+    public ItemRepository itemRepository;
+    public UserRepository userRepository;
+
+    public FileService fileService;
 
     public ItemResponse addItem(ItemRequest itemRequest) throws IOException {
         LocalDateTime creationDate = LocalDateTime.now();
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         String filePath = fileService.uploadImage(itemRequest.getImage());
+
 
         // get user
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -86,7 +85,7 @@ public class ItemService {
 
         // if item not found throw exception
         if (item.isEmpty()) {
-           throw new NotFoundError("Item with "+itemId+" not found");
+            throw new NotFoundError("Item with " + itemId + " not found");
         }
 
         // update
@@ -112,17 +111,12 @@ public class ItemService {
                 .build();
     }
 
-    public PageableResponse<ItemResponse> getAllItem(int pageNumber,int pageSize,String sortBy,String sortDir){
-        Sort sort = (sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
-        Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
-        Page<Item> page=itemRepository.findAll(pageable);
-        PageableResponse<ItemResponse> response = PageHelper.getPageableResponse(page, ItemResponse.class);
-        return  response;
+    public PageableResponse<ItemResponse> getAllItem(int pageNumber, int pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Item> page = itemRepository.findAll(pageable);
+        return PageHelper.getPageableResponse(page, ItemResponse.class);
     }
-
-
-
-
 
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item not found by this Id "));
@@ -137,6 +131,4 @@ public class ItemService {
         }
         itemRepository.delete(item);
     }
-
-
 }

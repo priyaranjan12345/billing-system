@@ -14,12 +14,12 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "Items")
+@Table(name = "Item")
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
-    private Long itemId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -33,18 +33,16 @@ public class Item {
     @Column(nullable = false)
     private String image;
 
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime creationDate;
 
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastModifiedDate;
 
     @ManyToOne
-    @JoinColumn(name = "item")
-    private SoldItems soldItems;
-
-    @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Override
@@ -52,7 +50,7 @@ public class Item {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Item item = (Item) o;
-        return getItemId() != null && Objects.equals(getItemId(), item.getItemId());
+        return getId() != null && Objects.equals(getId(), item.getId());
     }
 
     @Override

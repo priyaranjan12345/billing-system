@@ -23,7 +23,7 @@ import java.util.Objects;
 public class User implements UserDetails {
     @Id
     @GeneratedValue
-    private Integer userId;
+    private Integer id;
     private String firstname;
     private String lastname;
     private String email;
@@ -38,7 +38,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Orders> orders;
+    private List<BillingDetails> billingDetails;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @ToString.Exclude
@@ -84,7 +84,7 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         User user = (User) o;
-        return getUserId() != null && Objects.equals(getUserId(), user.getUserId());
+        return getId() != null && Objects.equals(getId(), user.getId());
     }
 
     @Override
