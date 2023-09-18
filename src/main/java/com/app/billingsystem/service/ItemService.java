@@ -11,7 +11,6 @@ import com.app.billingsystem.models.entities.User;
 import com.app.billingsystem.repository.ItemRepository;
 import com.app.billingsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +22,6 @@ import org.springframework.data.domain.Sort;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
