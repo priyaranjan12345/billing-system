@@ -19,9 +19,6 @@ public class BillingItem {
     @Column(nullable = false)
     private int itemQnt;
 
-    @Column(nullable = false)
-    private float itemUnitPrice;
-
     @ManyToOne
     @JoinColumn(name = "billing_details_id")
     private BillingDetails billingDetails;

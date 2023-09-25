@@ -9,15 +9,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
 public class FileService {
     @Value("${image.directory.path}")
-    private String imagePath;
+    private String imageFolderPath;
     private final Logger logger = LoggerFactory.getLogger(FileService.class);
-
 
     public String uploadImage(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
@@ -26,13 +26,13 @@ public class FileService {
         assert originalFilename != null;
         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String fileNameWithExtension = filename + extension;
-        String fullPathWithFileName = imagePath + File.separator + fileNameWithExtension;
+        String fullPathWithFileName = imageFolderPath + File.separator + fileNameWithExtension;
         if ((extension.equalsIgnoreCase(".png")) ||
                 (extension.equalsIgnoreCase(".jpg")) ||
                 (extension.equalsIgnoreCase(".jpeg"))) {
-            File folder = new File(imagePath);
+            File folder = new File(imageFolderPath);
             if (!folder.exists()) {
-                var result = folder.mkdirs();
+                folder.mkdirs();
             }
             Files.copy(file.getInputStream(), Paths.get(fullPathWithFileName));
             return fileNameWithExtension;
@@ -40,6 +40,12 @@ public class FileService {
             throw new BadApiRequestException("File with this" + extension + "not allowed !!!");
 
         }
+    }
+
+    public void deleteFile(String imagePath) throws IOException {
+        String fullPath = imageFolderPath + imagePath;
+        Path path = Paths.get(fullPath);
+        Files.delete(path);
     }
 
 

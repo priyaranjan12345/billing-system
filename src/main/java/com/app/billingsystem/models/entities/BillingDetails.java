@@ -17,7 +17,7 @@ public class BillingDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -29,10 +29,10 @@ public class BillingDetails {
     @Column(nullable = false)
     private int noOfItems;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Double discount;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Double gst;
 
     @Column(nullable = false)
