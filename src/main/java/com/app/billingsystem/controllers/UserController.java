@@ -5,14 +5,17 @@ import com.app.billingsystem.models.dtos.*;
 
 import com.app.billingsystem.service.BillingService;
 import com.app.billingsystem.service.ItemService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/app/v1/user")
@@ -59,6 +62,13 @@ public class UserController {
     public ResponseEntity<BillingDetailsResponse> saveOrderGenerateBill(@RequestBody CartItemsDto cartItemsDto) {
         BillingDetailsResponse billingDetailsResponse = billingService.saveBillingDetails(cartItemsDto);
         return new ResponseEntity<>(billingDetailsResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/item-image/{file-name}")
+    public void getItemImage(@PathVariable("file-name") String fileName, HttpServletResponse response) throws IOException {
+        InputStream resource = itemService.getItemImage(fileName);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource, response.getOutputStream());
     }
 
     @GetMapping(value = "/all-bills")

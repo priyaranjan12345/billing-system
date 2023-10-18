@@ -20,7 +20,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -112,5 +114,9 @@ public class ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item not found by this Id "));
         fileService.deleteFile(item.getImage());
         itemRepository.delete(item);
+    }
+
+    public InputStream getItemImage(String fileName) throws FileNotFoundException {
+        return fileService.getImage(fileName);
     }
 }
