@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,8 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "BillingDetails")
-public class BillingDetails {
+@Table(name = "bill_details")
+public class BillDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -37,6 +38,9 @@ public class BillingDetails {
 
     @Column(nullable = false)
     private Double grandTotal;
+
+    @OneToMany(mappedBy = "billDetails")
+    private List<BillItem> billItems;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

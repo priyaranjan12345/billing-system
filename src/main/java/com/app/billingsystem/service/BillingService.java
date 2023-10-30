@@ -3,10 +3,10 @@ package com.app.billingsystem.service;
 import com.app.billingsystem.exception.NotFoundError;
 import com.app.billingsystem.models.dtos.BillingDetailsResponse;
 import com.app.billingsystem.models.dtos.BillingItemResponse;
-import com.app.billingsystem.models.dtos.CartItem;
-import com.app.billingsystem.models.dtos.CartItemsDto;
-import com.app.billingsystem.models.entities.BillingDetails;
-import com.app.billingsystem.models.entities.BillingItem;
+import com.app.billingsystem.models.dtos.CartItemRequest;
+import com.app.billingsystem.models.dtos.CartItemsRequest;
+import com.app.billingsystem.models.entities.BillDetails;
+import com.app.billingsystem.models.entities.BillItem;
 import com.app.billingsystem.models.entities.Item;
 import com.app.billingsystem.models.entities.User;
 import com.app.billingsystem.repository.BillingDetailsRepository;
@@ -31,76 +31,63 @@ public class BillingService {
     final private UserRepository userRepository;
     final private ItemRepository itemRepository;
 
-    public BillingDetailsResponse saveBillingDetails(CartItemsDto cartItemsDto) {
-        // get user
+    public BillingDetailsResponse saveBillingDetails(CartItemsRequest cartItemsRequest) {
+        // current user
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         String username = userDetails.getUsername();
         User user = userRepository.findByEmail(username).orElseThrow(() -> new NotFoundError("Invalid User"));
 
-        // billing date
-        LocalDateTime currentDate = LocalDateTime.now();
-
-        // no of items
-        int noOfItems = cartItemsDto.getCartItems().size();
+        double grandTotal = 0.0;
+        double discount = cartItemsRequest.getDiscount();
+        double gstAmount = cartItemsRequest.getGstAmount();
+        List<BillItem> billItems = new ArrayList<BillItem>();
+        List<BillingItemResponse> billingItemResponses = new ArrayList<BillingItemResponse>();
+        LocalDateTime billingDate = LocalDateTime.now();
+        int noOfItems = cartItemsRequest.getCartItems().size();
 
         // generate invoice number
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         long ts = timestamp.getTime();
         String invNum = "INV-" + ts;
 
-        // calculate grand total
-        double grandTotal = 0.0;
-        List<Item> allItems = new ArrayList<>();
-
-        for (CartItem cartItem : cartItemsDto.getCartItems()) {
+        for (CartItemRequest cartItem : cartItemsRequest.getCartItems()) {
             Long itemId = cartItem.getItemId();
             Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundError("Item with " + itemId + " not found"));
             grandTotal += item.getPrice() * cartItem.getQuantity();
 
-            allItems.add(item);
-        }
-
-        // build billing details
-        BillingDetails billingDetails = BillingDetails.builder()
-                .user(user)
-                .billingDate(currentDate)
-                .noOfItems(noOfItems)
-                .invNo(invNum)
-                .discount(0.0)
-                .gst(0.0)
-                .grandTotal(grandTotal)
-                .build();
-
-        // save billing details
-        BillingDetails savedBillingDetails = billingDetailsRepository.save(billingDetails);
-
-        List<BillingItem> billingItems = new ArrayList<>();
-        List<BillingItemResponse> itemResponses = new ArrayList<>();
-
-        // arrange item
-        for (Item item : allItems) {
-            BillingItem billingItem = BillingItem.builder()
+            BillItem billItem = BillItem.builder()
+                    .itemQnt(cartItem.getQuantity())
                     .item(item)
-                    .itemQnt(noOfItems)
-                    .billingDetails(savedBillingDetails)
                     .build();
 
             BillingItemResponse billingItemResponse = BillingItemResponse.builder()
-                    .id(item.getId())
-                    .itemName(item.getName())
-                    .itemQnt(noOfItems)
                     .unitPrice(item.getPrice())
+                    .itemName(item.getName())
+                    .itemQnt(cartItem.getQuantity())
                     .build();
 
-            billingItems.add(billingItem);
-            itemResponses.add(billingItemResponse);
+            billItems.add(billItem);
+            billingItemResponses.add(billingItemResponse);
         }
 
-        // save all billing items
-        billingItemRepository.saveAll(billingItems);
+        // save bill details
+        BillDetails billingDetails = BillDetails.builder()
+                .user(user)
+                .billingDate(billingDate)
+                .noOfItems(noOfItems)
+                .invNo(invNum)
+                .discount(discount)
+                .gst(gstAmount)
+                .grandTotal(grandTotal)
+                .billItems(billItems)
+                .build();
+        BillDetails savedBillingDetails = billingDetailsRepository.save(billingDetails);
 
-        // return response
+        // save bill items
+        billItems.forEach(e -> e.setBillDetails(savedBillingDetails));
+        billingItemRepository.saveAll(billItems);
+
         return BillingDetailsResponse.builder()
                 .id(savedBillingDetails.getId())
                 .billingDateTime(savedBillingDetails.getBillingDate())
@@ -109,11 +96,14 @@ public class BillingService {
                 .discount(savedBillingDetails.getDiscount())
                 .gst(savedBillingDetails.getGst())
                 .grandTotal(savedBillingDetails.getGrandTotal())
-                .items(itemResponses)
+                .items(billingItemResponses)
                 .build();
     }
 
-    public void getBills() {
+    public void getBillById(Long billId) {
+        BillDetails billDetails = billingDetailsRepository.findById(billId).orElseThrow(() -> new NotFoundError("Item with " + billId + " not found"));
+    }
 
+    public void getAllBills() {
     }
 }

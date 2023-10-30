@@ -9,8 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CartItemsDto {
-    private List<CartItem> cartItems;
+public class CartItemsRequest {
+    private List<CartItemRequest> cartItems;
     private Double discount;
-    private Double gst;
+    private Double gstAmount;
 }

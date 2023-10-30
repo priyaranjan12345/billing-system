@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "BillingItem")
-public class BillingItem {
+@Table(name = "bill_item")
+public class BillItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -19,9 +19,12 @@ public class BillingItem {
     @Column(nullable = false)
     private int itemQnt;
 
+    @Column(nullable = false)
+    private double price;
+
     @ManyToOne
     @JoinColumn(name = "billing_details_id")
-    private BillingDetails billingDetails;
+    private BillDetails billDetails;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
