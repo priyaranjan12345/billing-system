@@ -19,7 +19,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -38,11 +38,19 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<BillingDetails> billingDetails;
+    private List<BillDetails> billingDetails;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Item> items;
+
+    @OneToOne
+    @JoinColumn(name="user_address_id")
+    private UserAddress userAddress;
+//
+//    @OneToOne
+//    @JoinColumn(name = "shop_address_id")
+//    private ShopAddress shopAddress;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
