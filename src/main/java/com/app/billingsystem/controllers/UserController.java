@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.io.InputStream;
 
+// user item controller, user bill controller,
+// user profile controller
 @RestController
 @RequestMapping("/app/v1/user")
 @AllArgsConstructor
@@ -59,7 +61,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/save-order-generate-bill")
-    public ResponseEntity<BillingDetailsResponse> saveOrderGenerateBill(@RequestBody CartItemsDto cartItemsDto) {
+    public ResponseEntity<BillingDetailsResponse> saveOrderGenerateBill(@RequestBody CartItemsRequest cartItemsDto) {
         BillingDetailsResponse billingDetailsResponse = billingService.saveBillingDetails(cartItemsDto);
         return new ResponseEntity<>(billingDetailsResponse, HttpStatus.OK);
     }
